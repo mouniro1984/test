@@ -581,6 +581,10 @@ app.post('/api/appointments', auth, async (req, res) => {
   }
 });
 
+app.get('/api/test', (req, res)=>{
+  res.status(200).json({message: "server is up and running"})
+})
+
 // Initial Setup
 const createInitialAdmin = async () => {
   try {
