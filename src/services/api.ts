@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User, FormData, UserResponse } from '../types/user';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://medical-back-react.onrender.com/api';
 
 // Add axios interceptor for error handling
 axios.interceptors.response.use(

@@ -157,14 +157,14 @@ const Patients = () => {
       let response;
       if (editingPatient) {
         response = await axios.put(
-          `http://localhost:5000/api/patients/${editingPatient._id}`,
+          `https://medical-back-react.onrender.com/api/patients/${editingPatient._id}`,
           patientData,
           { headers }
         );
         setMessage('Patient modifié avec succès');
       } else {
         response = await axios.post(
-          'http://localhost:5000/api/patients',
+          'https://medical-back-react.onrender.com/api/patients',
           patientData,
           { headers }
         );
@@ -201,7 +201,7 @@ const Patients = () => {
   const fetchPatients = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/patients', {
+      const response = await axios.get('https://medical-back-react.onrender.com/api/patients', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -217,7 +217,7 @@ const Patients = () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce patient ?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/patients/${id}`, {
+        await axios.delete(`https://medical-back-react.onrender.com/api/patients/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

@@ -34,7 +34,7 @@ const Appointments = () => {
   const fetchAppointments = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/appointments`, {
+      const response = await axios.get(`https://medical-back-react.onrender.com/api/appointments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -49,7 +49,7 @@ const Appointments = () => {
   const fetchPatients = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/patients', {
+      const response = await axios.get('https://medical-back-react.onrender.com/api/patients', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -89,7 +89,7 @@ const Appointments = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/appointments',
+        'https://medical-back-react.onrender.com/api/appointments',
         formData,
         {
           headers: {

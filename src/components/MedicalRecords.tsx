@@ -47,7 +47,7 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
   const fetchRecords = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/medical-records/${patientId}`, {
+      const response = await axios.get(`https://medical-back-react.onrender.com/api/medical-records/${patientId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setRecords(response.data);
@@ -110,13 +110,13 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
 
       if (editingRecord) {
         await axios.put(
-          `http://localhost:5000/api/medical-records/${editingRecord._id}`,
+          `https://medical-back-react.onrender.com/api/medical-records/${editingRecord._id}`,
           formDataToSend,
           config
         );
       } else {
         await axios.post(
-          `http://localhost:5000/api/medical-records/${patientId}`,
+          `https://medical-back-react.onrender.com/api/medical-records/${patientId}`,
           formDataToSend,
           config
         );
@@ -156,7 +156,7 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce dossier médical ?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/medical-records/${recordId}`, {
+        await axios.delete(`https://medical-back-react.onrender.com/api/medical-records/${recordId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         fetchRecords();
@@ -172,7 +172,7 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:5000/api/medical-records/attachment/${filename}`,
+        `https://medical-back-react.onrender.com/api/medical-records/attachment/${filename}`,
         {
           headers: { 'Authorization': `Bearer ${token}` },
           responseType: 'blob'

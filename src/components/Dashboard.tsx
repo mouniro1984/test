@@ -42,8 +42,8 @@ const Dashboard = () => {
         };
 
         const [patientsRes, appointmentsRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/patients', { headers }),
-          axios.get('http://localhost:5000/api/appointments', { headers })
+          axios.get('https://medical-back-react.onrender.com/api/patients', { headers }),
+          axios.get('https://medical-back-react.onrender.com/api/appointments', { headers })
         ]);
 
         setPatients(patientsRes.data);
@@ -68,7 +68,7 @@ const Dashboard = () => {
       }
 
       const response = await axios.post(
-        'http://localhost:5000/api/appointments',
+        'https://medical-back-react.onrender.com/api/appointments',
         formData,
         {
           headers: {
