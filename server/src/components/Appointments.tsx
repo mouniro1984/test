@@ -2,22 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import axios from 'axios';
 
-interface Appointment {
-  _id: string;
-  patient: {
-    _id: string;
-    nom: string;
-    prenom: string;
-  };
-  date: string;
-  heure: string;
-  motif: string;
-}
-
 interface Patient {
   _id: string;
   nom: string;
   prenom: string;
+}
+
+interface Appointment {
+  _id: string;
+  patient: Patient | null;
+  date: string;
+  heure: string;
+  motif: string;
 }
 
 const Appointments = () => {
@@ -45,8 +41,8 @@ const Appointments = () => {
       });
       setAppointments(response.data);
     } catch (error) {
-      console.error('Erreur lors de la récupération des rendez-vous:', error);
-      setMessage('Erreur lors de la récupération des rendez-vous');
+      console.error('Erreur lors de :', error);
+      setMessage('Erreur lors de ');
     }
   };
 
@@ -121,6 +117,19 @@ const Appointments = () => {
     }
   };
 
+  const formatPatientName = (patient: Patient | null) => {
+    if (!patient) return 'Patient non disponible';
+    return `${patient.nom || ''} ${patient.prenom || ''}`.trim() || 'Nom non disponible';
+  };
+
+  const formatDate = (dateString: string) => {
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch {
+      return 'Date invalide';
+    }
+  };
+
   return (
     <div className="p-6">
       {message && (
@@ -164,13 +173,17 @@ const Appointments = () => {
             {appointments.map((appointment) => (
               <tr key={appointment._id}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {`${appointment.patient.nom} ${appointment.patient.prenom}`}
+                  {formatPatientName(appointment.patient)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(appointment.date).toLocaleDateString()}
+                  {formatDate(appointment.date)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{appointment.heure}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{appointment.motif}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {appointment.heure || 'Heure non spécifiée'}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {appointment.motif || 'Aucun motif'}
+                </td>
               </tr>
             ))}
           </tbody>
