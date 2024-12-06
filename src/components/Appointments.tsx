@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 
 interface Patient {
   _id: string;
@@ -34,7 +35,7 @@ const Appointments = () => {
   const fetchAppointments = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`https://medical-back-react.onrender.com/api/appointments`, {
+      const response = await axios.get(`${API_BASE_URL}/appointments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -49,7 +50,7 @@ const Appointments = () => {
   const fetchPatients = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://medical-back-react.onrender.com/api/patients', {
+      const response = await axios.get(`${API_BASE_URL}/patients`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

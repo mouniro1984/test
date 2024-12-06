@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import axios from 'axios';
-
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 interface User {
   id: string;
   email: string;
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = useCallback(async (email: string, password: string) => {
     try {
-      const response = await axios.post('https://medical-back-react.onrender.com/api/auth/login', {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, { // Utilisation de l'URL consolidée
         email,
         password
       });

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Search, FileIcon } from 'lucide-react';
 import axios from 'axios';
 import MedicalRecords from './MedicalRecords';
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 
 interface Patient {
   _id: string;
@@ -157,14 +158,14 @@ const Patients = () => {
       let response;
       if (editingPatient) {
         response = await axios.put(
-          `https://medical-back-react.onrender.com/api/patients/${editingPatient._id}`,
+          `${API_BASE_URL}/patients/${editingPatient._id}`,
           patientData,
           { headers }
         );
         setMessage('Patient modifié avec succès');
       } else {
         response = await axios.post(
-          'https://medical-back-react.onrender.com/api/patients',
+          `${API_BASE_URL}/patients`,
           patientData,
           { headers }
         );
@@ -201,7 +202,7 @@ const Patients = () => {
   const fetchPatients = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://medical-back-react.onrender.com/api/patients', {
+      const response = await axios.get(`${API_BASE_URL}/patients`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -217,7 +218,7 @@ const Patients = () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce patient ?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://medical-back-react.onrender.com/api/patients/${id}`, {
+        await axios.delete(`${API_BASE_URL}/patients/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

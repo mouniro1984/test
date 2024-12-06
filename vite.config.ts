@@ -8,3 +8,6 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
 });
+
+
+export const API_BASE_URL = 'https://medical-back-react.onrender.com/api';

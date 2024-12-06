@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Save } from 'lucide-react';
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 
 const Profile = () => {
   const { user } = useAuth();
@@ -24,7 +25,7 @@ const Profile = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://medical-back-react.onrender.com/api/users/profile', {
+      const response = await fetch( `${API_BASE_URL}/users/profile`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { X, Plus, Edit, Trash2, Paperclip, Download } from 'lucide-react';
-
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 interface MedicalRecord {
   _id: string;
   patientId: string;
@@ -47,7 +47,7 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
   const fetchRecords = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`https://medical-back-react.onrender.com/api/medical-records/${patientId}`, {
+      const response = await axios.get(`${API_BASE_URL}/medical-records/${patientId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setRecords(response.data);
@@ -110,13 +110,13 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
 
       if (editingRecord) {
         await axios.put(
-          `https://medical-back-react.onrender.com/api/medical-records/${editingRecord._id}`,
+          `${API_BASE_URL}/medical-records/${editingRecord._id}`,
           formDataToSend,
           config
         );
       } else {
         await axios.post(
-          `https://medical-back-react.onrender.com/api/medical-records/${patientId}`,
+          `${API_BASE_URL}/medical-records/${patientId}`,
           formDataToSend,
           config
         );
@@ -156,7 +156,7 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce dossier médical ?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://medical-back-react.onrender.com/api/medical-records/${recordId}`, {
+        await axios.delete(`${API_BASE_URL}/medical-records/${recordId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         fetchRecords();
@@ -172,7 +172,7 @@ const MedicalRecords: React.FC<Props> = ({ patientId, onClose, patient }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `https://medical-back-react.onrender.com/api/medical-records/attachment/${filename}`,
+        `${API_BASE_URL}/medical-records/attachment/${filename}`,
         {
           headers: { 'Authorization': `Bearer ${token}` },
           responseType: 'blob'

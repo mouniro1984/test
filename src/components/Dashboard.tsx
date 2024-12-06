@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Calendar, Clock, Plus } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 
 interface Patient {
   _id: string;
@@ -42,8 +43,8 @@ const Dashboard = () => {
         };
 
         const [patientsRes, appointmentsRes] = await Promise.all([
-          axios.get('https://medical-back-react.onrender.com/api/patients', { headers }),
-          axios.get('https://medical-back-react.onrender.com/api/appointments', { headers })
+          axios.get(`${API_BASE_URL}/patients`, { headers }),
+          axios.get(`${API_BASE_URL}/appointments`, { headers })
         ]);
 
         setPatients(patientsRes.data);
@@ -68,7 +69,7 @@ const Dashboard = () => {
       }
 
       const response = await axios.post(
-        'https://medical-back-react.onrender.com/api/appointments',
+        `${API_BASE_URL}/appointments`,
         formData,
         {
           headers: {

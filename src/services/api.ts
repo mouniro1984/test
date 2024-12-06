@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User, FormData, UserResponse } from '../types/user';
 
-const API_URL = 'https://medical-back-react.onrender.com/api';
+import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
 
 // Add axios interceptor for error handling
 axios.interceptors.response.use(
@@ -17,7 +17,7 @@ axios.interceptors.response.use(
 
 const getUsers = async (): Promise<User[]> => {
   const token = localStorage.getItem('token');
-  const response = await axios.get(`${API_URL}/users`, {
+  const response = await axios.get(`${API_BASE_URL}/users`, {
     headers: { Authorization: `Bearer ${token}` }
   });
   return response.data;
@@ -25,7 +25,7 @@ const getUsers = async (): Promise<User[]> => {
 
 const createUser = async (userData: FormData): Promise<UserResponse> => {
   const token = localStorage.getItem('token');
-  const response = await axios.post(`${API_URL}/users`, userData, {
+  const response = await axios.post(`${API_BASE_URL}/users`, userData, {
     headers: { Authorization: `Bearer ${token}` }
   });
   return response.data;
@@ -39,7 +39,7 @@ const updateUser = async (id: string, userData: Partial<FormData>): Promise<User
     delete userData.password;
   }
   
-  const response = await axios.put(`${API_URL}/users/${id}`, userData, {
+  const response = await axios.put(`${API_BASE_URL}/users/${id}`, userData, {
     headers: { Authorization: `Bearer ${token}` }
   });
   return response.data;
@@ -47,7 +47,7 @@ const updateUser = async (id: string, userData: Partial<FormData>): Promise<User
 
 const deleteUser = async (id: string): Promise<UserResponse> => {
   const token = localStorage.getItem('token');
-  const response = await axios.delete(`${API_URL}/users/${id}`, {
+  const response = await axios.delete(`${API_BASE_URL}/users/${id}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
   return response.data;
