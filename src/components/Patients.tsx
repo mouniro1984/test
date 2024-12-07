@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, FileIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, FileIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import MedicalRecords from './MedicalRecords';
-import { API_BASE_URL } from '../config'; // Import de l'URL de l'API
+import { API_BASE_URL } from '../config';
 
 interface Patient {
   _id: string;
@@ -55,6 +55,8 @@ const Patients = () => {
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
   const [showMedicalRecords, setShowMedicalRecords] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [patientsPerPage] = useState(4);
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -67,6 +69,22 @@ const Patients = () => {
   const [message, setMessage] = useState<string | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
+
+  // Pagination calculations
+  const filteredPatients = patients.filter(patient =>
+    patient.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    patient.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    patient.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+  const currentPatients = filteredPatients.slice(indexOfFirstPatient, indexOfLastPatient);
+  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   const resetForm = () => {
     setFormData({
@@ -242,15 +260,14 @@ const Patients = () => {
     setShowMedicalRecords(true);
   };
 
-  const filteredPatients = patients.filter(patient =>
-    patient.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   useEffect(() => {
     fetchPatients();
   }, []);
+
+  useEffect(() => {
+    // Reset to first page when search term changes
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -316,8 +333,8 @@ const Patients = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredPatients.length > 0 ? (
-                filteredPatients.map((patient) => (
+              {currentPatients.length > 0 ? (
+                currentPatients.map((patient) => (
                   <tr key={patient._id} className="hover:bg-gray-50 transition-colors duration-200">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {patient.nom}
@@ -371,6 +388,92 @@ const Patients = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {filteredPatients.length > 0 && (
+          <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+            <div className="flex-1 flex justify-between sm:hidden">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
+                  currentPage === 1
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Précédent
+              </button>
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
+                  currentPage === totalPages
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Suivant
+              </button>
+            </div>
+            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm text-gray-700">
+                  Affichage de{' '}
+                  <span className="font-medium">{indexOfFirstPatient + 1}</span>
+                  {' à '}
+                  <span className="font-medium">
+                    {Math.min(indexOfLastPatient, filteredPatients.length)}
+                  </span>
+                  {' sur '}
+                  <span className="font-medium">{filteredPatients.length}</span>
+                  {' patients'}
+                </p>
+              </div>
+              <div>
+                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
+                      currentPage === 1
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-gray-500 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="sr-only">Précédent</span>
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  {[...Array(totalPages)].map((_, index) => (
+                    <button
+                      key={index + 1}
+                      onClick={() => paginate(index + 1)}
+                      className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                        currentPage === index + 1
+                          ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                          : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
+                      currentPage === totalPages
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-gray-500 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="sr-only">Suivant</span>
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {showModal && (

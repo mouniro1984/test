@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard'
 import Patients from './components/Patients';
 import Appointments from './components/Appointments';
 import UserManagement from './components/UserManagement';
