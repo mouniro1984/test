@@ -182,12 +182,25 @@ const Patients = () => {
         );
         setMessage('Patient modifié avec succès');
       } else {
+        // Ajout d'un nouveau patient avec envoi d'email
         response = await axios.post(
           `${API_BASE_URL}/patients`,
           patientData,
           { headers }
         );
-        setMessage('Patient ajouté avec succès');
+
+        // Envoi de l'email de confirmation
+        try {
+          await axios.post(
+            `${API_BASE_URL}/patients/${response.data._id}/send-confirmation`,
+            {},
+            { headers }
+          );
+          setMessage('Patient ajouté avec succès. Un email de confirmation a été envoyé.');
+        } catch (emailError) {
+          console.error('Erreur lors de l\'envoi de l\'email:', emailError);
+          setMessage('Patient ajouté avec succès, mais l\'email n\'a pas pu être envoyé.');
+        }
       }
 
       if (response.status === 200 || response.status === 201) {
